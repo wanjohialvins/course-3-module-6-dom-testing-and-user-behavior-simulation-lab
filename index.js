@@ -2,14 +2,67 @@
 // - Add event listeners for button clicks and form submissions.
 // - Use JavaScript to dynamically update the DOM based on user actions.
 
-// Step 2: DOM Manipulation Functions
-// - Implement functions to add, update, and remove DOM elements.
-// - Ensure all elements are dynamically created with appropriate attributes and content.
+function addElementToDOM(containerId, text) {
+  const container = document.getElementById(containerId);
+  const newElement = document.createElement('p');
+  newElement.textContent = text;
+  container.appendChild(newElement);
+}
 
-// Step 3: Error Handling
-// - Display error messages in the DOM for invalid inputs or missing elements.
-// - Create reusable functions to handle common error cases.
+function removeElementFromDOM(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.remove();
+  }
+}
 
-// Step 4: Reusable Utilities
-// - Create modular utility functions, such as createElement(tag, attributes).
-// - Ensure all functions follow DRY principles for maintainability.
+function simulateClick(containerId, text) {
+  addElementToDOM(containerId, text);
+}
+
+function handleFormSubmit(formId, containerId) {
+  const form = document.getElementById(formId);
+  const input = document.getElementById('user-input');
+  const errorElement = document.getElementById('error-message');
+
+  const value = input.value.trim();
+
+  if (value === '') {
+    errorElement.textContent = 'Input cannot be empty';
+    errorElement.classList.remove('hidden');
+  } else {
+    errorElement.classList.add('hidden');
+    addElementToDOM(containerId, value);
+    input.value = ''; // Clear input
+  }
+}
+
+// Set up event listeners if the DOM is available
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const clickBtn = document.getElementById('simulate-click');
+    if (clickBtn) {
+      clickBtn.addEventListener('click', () => {
+        simulateClick('dynamic-content', 'Button Clicked!');
+      });
+    }
+
+    const userForm = document.getElementById('user-form');
+    if (userForm) {
+      userForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleFormSubmit('user-form', 'dynamic-content');
+      });
+    }
+  });
+}
+
+// Export functions for testing
+if (typeof module !== 'undefined') {
+  module.exports = {
+    addElementToDOM,
+    removeElementFromDOM,
+    simulateClick,
+    handleFormSubmit,
+  };
+}
